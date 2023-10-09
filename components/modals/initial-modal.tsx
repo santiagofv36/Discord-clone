@@ -4,6 +4,8 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 import {
   Dialog,
@@ -37,7 +39,7 @@ const formSchema = z.object({
 
 export const InitialModal = () => {
   const [isMounted, setIsMounted] = useState(false);
-
+  const router = useRouter();
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -53,7 +55,14 @@ export const InitialModal = () => {
   const isLoading = form.formState.isSubmitting;
 
   const onSumbit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    try {
+      await axios.post("/api/servers", values);
+      router.refresh();
+      window.location.reload();
+      form.reset();
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   if (!isMounted) {
@@ -82,7 +91,7 @@ export const InitialModal = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <FileUpload 
+                        <FileUpload
                           endpoint="serverImage"
                           value={field.value}
                           onChange={field.onChange}
