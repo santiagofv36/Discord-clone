@@ -27,11 +27,6 @@ export const ChatVideoButton = () => {
     );
     router.push(url);
   };
-  
-  useEffect(() => {
-    const leaveBtn = document.getElementsByClassName("lk-disconnect-button")[0];
-    console.log(leaveBtn);
-  }, []);
 
 
   const tooltipLabel = isVideo ? "End video call" : "Start video call";
